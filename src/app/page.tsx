@@ -15,9 +15,15 @@ export default function Home() {
       className="lg:px-20 grid grid-cols-[1fr_2fr_1fr]"
       onClick={() => dispatch(increment())}
     >
-      <HomeItems />
-      <HomeCollections />
-      <HomeCart />
+      <div className="pt-4">
+        <HomeItems />
+      </div>
+      <div className="py-4 border-l border-r border-gray-300">
+        <HomeCollections />
+      </div>
+      <div className="pl-8 py-4">
+        <HomeCart />
+      </div>
     </div>
   );
 }

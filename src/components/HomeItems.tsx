@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const items = [
   {
     item: "NEW ITEM",
@@ -21,10 +23,18 @@ const items = [
   },
 ];
 const HomeItems = () => {
+  const [active, setActive] = useState(0);
+
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col py-2">
       {items?.map((item, index) => (
-        <div key={index} className="py-2 hover:bg-sky-100 w-full hover:border-r-blue-800 border"> 
+        <div
+          key={index}
+          onClick={() => setActive(index)}
+          className={`py-2 hover:bg-gradient-to-r hover:from-white hover:to-sky-100 w-full hover:border-r-4 hover:border-blue-600 ${
+            active === index && "text-blue-500"
+          }`}
+        >
           {item.item} ({item.count})
         </div>
       ))}
