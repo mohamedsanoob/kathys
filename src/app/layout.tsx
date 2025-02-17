@@ -27,12 +27,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased w-full absolute font-poppins flex flex-col justify-between h-full`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased w-full h-screen font-poppins flex flex-col overflow-hidden`}
       >
         <StoreProvider>
           <Navbar />
-          <div className="flex-1 overflow-y-auto h-full">{children}</div>
-          {/* <Footer /> */}
+          {/* Ensure children take remaining space & do not cause body scroll */}
+          <div className="flex-1 flex overflow-hidden">{children}</div>
         </StoreProvider>
       </body>
     </html>
