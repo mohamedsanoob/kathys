@@ -8,7 +8,8 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="flex flex-col px-2 lg:px-20 bg-white drop-shadow-md">
+    
+    <header className="flex flex-col px-2 lg:px-20 bg-white drop-shadow-md h-[17dvh] lg:h-[10dvh]">
       {/* Logo */}
       <div className="flex justify-between items-center text-black">
         <div className="flex gap-8 items-center">

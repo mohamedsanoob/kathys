@@ -108,6 +108,18 @@ const categories = [
         name: "CHURIDAR SET",
         price: 1500,
       },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "CHURIDAR SET",
+        price: 1500,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "CHURIDAR SET",
+        price: 1500,
+      },
     ],
   },
 ];
@@ -122,13 +134,13 @@ const HomeCollections = () => {
   return (
     <div className="flex flex-col">
       {categories.map((category, categoryIndex) => (
-        <div key={categoryIndex} className="category-container mb-8">
+        <div key={categoryIndex} className="category-container">
           <div className="category-title-container">
-            <h2 className="category-title sticky top-0 bg-white z-10 py-2 text-[20px] font-[500] px-8">
+            <h2 className="category-title sticky top-0 bg-white z-10 py-2 text-[20px] font-[500] lg:px-8 px-4">
               {category.title}
             </h2>
           </div>
-          <div className="overflow-y-auto max-h-[300px] px-8">
+          <div className="overflow-y-auto max-h-[300px] lg:px-8 px-4">
             <div className="flex flex-col gap-4">
               {category.items.slice(0, visibleItems).map((item, index) => (
                 <div

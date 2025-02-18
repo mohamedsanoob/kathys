@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import StoreProvider from "./StoreProvider";
+import Footer from "@/components/Footer";
+import PostNav from "@/components/PostNav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +34,13 @@ export default function RootLayout({
         <StoreProvider>
           <Navbar />
           {/* Ensure children take remaining space & do not cause body scroll */}
-          <div className="flex-1 flex overflow-hidden">{children}</div>
+          <div className="overflow-auto">
+            {children}
+            <Footer />
+          </div>
+          <div className="lg:hidden ">
+            <PostNav />
+          </div>
         </StoreProvider>
       </body>
     </html>
