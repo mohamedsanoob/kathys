@@ -122,6 +122,124 @@ const categories = [
       },
     ],
   },
+  {
+    title: "New Collections",
+    items: [
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "BLOCK PRINTED MASHRU SILK FABRIC",
+        price: 1125,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "BLOCK PRINTED MASHRU SILK FABRIC",
+        price: 1125,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "BLOCK PRINTED MASHRU SILK FABRIC",
+        price: 1125,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "BLOCK PRINTED MASHRU SILK FABRIC",
+        price: 1125,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "BLOCK PRINTED MASHRU SILK FABRIC",
+        price: 1125,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "BLOCK PRINTED MASHRU SILK FABRIC",
+        price: 1125,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "BLOCK PRINTED MASHRU SILK FABRIC",
+        price: 1125,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "BLOCK PRINTED MASHRU SILK FABRIC",
+        price: 1125,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "BLOCK PRINTED MASHRU SILK FABRIC",
+        price: 1125,
+      },
+    ],
+  },
+  {
+    title: "Churidars",
+    items: [
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "CHURIDAR SET",
+        price: 1500,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "CHURIDAR SET",
+        price: 1500,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "CHURIDAR SET",
+        price: 1500,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "CHURIDAR SET",
+        price: 1500,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "CHURIDAR SET",
+        price: 1500,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "CHURIDAR SET",
+        price: 1500,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "CHURIDAR SET",
+        price: 1500,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "CHURIDAR SET",
+        price: 1500,
+      },
+      {
+        image:
+          "https://dukaan.b-cdn.net/200x200/webp/media/712b3178-3816-4a1b-9474-f152fb7c0762.jpeg",
+        name: "CHURIDAR SET",
+        price: 1500,
+      },
+    ],
+  },
 ];
 
 const HomeCollections = () => {
