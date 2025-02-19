@@ -258,7 +258,7 @@ const HomeCollections = () => {
               {category.title}
             </h2>
           </div>
-          <div className="overflow-y-auto max-h-[300px] lg:px-8 px-4">
+          <div className="overflow-y-auto lg:px-8 px-4">
             <div className="flex flex-col gap-4">
               {category.items.slice(0, visibleItems).map((item, index) => (
                 <div

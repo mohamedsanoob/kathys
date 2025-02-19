@@ -11,7 +11,7 @@ const HomeItems = () => {
   const [active, setActive] = useState(0);
 
   return (
-    <div className="flex flex-col py-2">
+    <div className="flex flex-col py-2 sticky">
       {categories.map((category, index) => (
         <div
           key={index}
