@@ -1,4 +1,5 @@
 "use client";
+import { Divider } from "@mui/material";
 import { useState } from "react";
 
 const products = [
@@ -56,7 +57,7 @@ const HomeCart = () => {
   const [count, setCount] = useState(1);
 
   return (
-    <div className="flex flex-col justify-between h-full">
+    <div className="flex flex-col justify-between sticky top-0 h-[calc(100dvh_-_12dvh)] pb-4">
       {/* Header */}
       <div className="flex justify-between py-2">
         <div className="flex gap-3">
@@ -97,12 +98,13 @@ const HomeCart = () => {
       </div>
 
       {/* Footer with Subtotal and Button */}
-      <div className="mt-auto">
+      <div className="mt-auto flex flex-col gap-4">
+        <Divider />
         <div className="flex justify-between">
           <p>Subtotal</p>
           <p>1250</p>
         </div>
-        <button className="bg-blue-800 w-full p-3 rounded-lg text-white mt-4">
+        <button className="bg-blue-500 w-full p-3 rounded-lg text-white">
           Go to cart
         </button>
       </div>

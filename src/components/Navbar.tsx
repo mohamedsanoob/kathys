@@ -9,7 +9,7 @@ const Navbar = () => {
 
   return (
     
-    <header className="flex flex-col px-2 lg:px-20 bg-white drop-shadow-md h-[17dvh] lg:h-[10dvh]">
+    <header className="flex flex-col px-2 lg:px-20 bg-white drop-shadow-md h-[17dvh] lg:h-[10dvh] mb-4">
       {/* Logo */}
       <div className="flex justify-between items-center text-black">
         <div className="flex gap-8 items-center">
@@ -61,7 +61,7 @@ const Navbar = () => {
 
         {/* Mobile Navigation Menu */}
         <ul
-          className={`absolute top-[8rem] lg:top-20 lg:hidden left-0 w-full bg-white flex flex-col items-center text-lg transition-all duration-300 ${
+          className={`absolute top-[8rem] lg:top-20 lg:hidden left-0 w-full bg-white flex flex-col items-center text-lg transition-all duration-300 z-1000 ${
             isMenuOpen
               ? "opacity-100 visible scale-x-100"
               : "opacity-0 invisible scale-x-0"

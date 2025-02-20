@@ -11,14 +11,14 @@ const HomeItems = () => {
   const [active, setActive] = useState(0);
 
   return (
-    <div className="flex flex-col py-2 sticky">
+    <div className="flex flex-col py-2 sticky top-0 h-[calc(100dvh_-_14dvh)">
       {categories.map((category, index) => (
         <div
           key={index}
           onClick={() => setActive(index)}
-          className={`py-2 px-4 cursor-pointer hover:bg-gradient-to-r hover:from-white hover:to-sky-100 border-r-4 ${
+          className={`py-2 px-4 cursor-pointer hover:text-blue-500 border-r-4 ${
             active === index
-              ? "border-blue-600 text-blue-500"
+              ? "border-blue-600 text-blue-500 bg-gradient-to-r from-white to-sky-100"
               : "border-transparent"
           }`}
         >

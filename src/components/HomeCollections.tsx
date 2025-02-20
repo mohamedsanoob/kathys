@@ -1,4 +1,5 @@
-'use client';
+"use client";
+import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 
@@ -252,20 +253,20 @@ const HomeCollections = () => {
   return (
     <div className="flex flex-col">
       {categories.map((category, categoryIndex) => (
-        <div key={categoryIndex} className="category-container">
-          <div className="category-title-container">
+        <div key={categoryIndex} className="category-container relative pb-8">
+          <div className="category-title-container sticky top-0">
             <h2 className="category-title sticky top-0 bg-white z-10 py-2 text-[20px] font-[500] lg:px-8 px-4">
               {category.title}
             </h2>
           </div>
-          <div className="overflow-y-auto lg:px-8 px-4">
+          <div className="overflow-y-auto">
             <div className="flex flex-col gap-4">
               {category.items.slice(0, visibleItems).map((item, index) => (
                 <div
                   key={index}
-                  className="flex gap-4 items-center py-2 hover:bg-gray-50"
+                  className="flex gap-4 items-center py-2 hover:bg-gray-50 px-8"
                 >
-                  <div className="w-[140px] h-[140px] border border-gray-200 rounded-md">
+                  <div className="w-[140px] h-[140px] border border-gray-500 rounded-md">
                     <Image
                       src={item.image}
                       alt="item"
@@ -280,7 +281,7 @@ const HomeCollections = () => {
                     </a>
                     <div className="flex justify-between">
                       <p>${item.price}</p>
-                      <div className="border border-blue-700 rounded-sm px-3 text-blue-700 cursor-pointer">
+                      <div className="border border-blue-700 rounded-md px-3 text-blue-700 cursor-pointer">
                         ADD +
                       </div>
                     </div>
@@ -288,14 +289,17 @@ const HomeCollections = () => {
                 </div>
               ))}
             </div>
-            {category.items.length > visibleItems && (
-              <button
-                onClick={handleShowAll}
-                className="text-blue-500 mt-4 py-2 rounded bg-gray-100 px-4 text-md-center flex items-center justify-center" 
-              >
-                See All
-              </button>
-            )}
+            <div className="w-full flex justify-center items-center">
+              {category.items.length > visibleItems && (
+                <button
+                  onClick={handleShowAll}
+                  className="mt-4 py-1 rounded bg-gray-100 px-4 text-md-center flex items-center justify-center"
+                >
+                  <p>SEE ALL PRODUCTS</p>
+                  <ChevronRight />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       ))}
