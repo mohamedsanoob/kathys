@@ -7,12 +7,12 @@ const categories = [
   { item: "SAREES", count: 30 },
 ];
 
-const HomeItems = () => {
+const HomeItems = ({category}) => {
   const [active, setActive] = useState(0);
 
   return (
     <div className="flex flex-col py-2 sticky top-0 h-[calc(100dvh_-_14dvh)">
-      {categories.map((category, index) => (
+      {category.map((category, index) => (
         <div
           key={index}
           onClick={() => setActive(index)}
@@ -22,7 +22,7 @@ const HomeItems = () => {
               : "border-transparent"
           }`}
         >
-          {category.item} ({category.count})
+          {category.categoryName} ({category?.products?.length})
         </div>
       ))}
     </div>

@@ -5,17 +5,17 @@ const Footer = () => {
     <footer className="flex flex-col bg-slate-900 items-center text-white gap-8 py-6">
       <div className="flex flex-col lg:flex-col gap-12">
         <div className="">
-          <img src="" />
+          {/* <img src="" /> */}
           <p>Fast delivery (₹75 per order)</p>
           <p>Delivery happens within: 3-5 days</p>
         </div>
         <div>
-          <img src="" />
+          {/* <img src="" /> */}
           <p>Fast delivery (₹75 per order)</p>
           <p>Delivery happens within: 3-5 days</p>
         </div>
         <div>
-          <img src="" />
+          {/* <img src="" /> */}
           <p>Fast delivery (₹75 per order)</p>
           <p>Delivery happens within: 3-5 days</p>
         </div>

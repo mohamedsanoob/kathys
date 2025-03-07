@@ -22,6 +22,34 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/components/HomeItems.jsx",
+    "src/app/page.jsx",
+    "src/components/HomeCollections.jsx",
+    "src/app/cart/components/CartItems.jsx",
+    "src/app/cart/components/Checkout.jsx",
+    "src/app/cart/page.jsx",
+    "src/app/categories/page.jsx",
+    "src/app/categories/[categoryName]/page.tsx",
+    "src/app/categories/[categoryName]/[productId]/page.tsx",
+    "src/app/product/page.jsx",
+    "src/app/product/_components/ProductDetails.tsx",
+    "src/app/product/_components/Review.jsx",
+    "src/app/product/_components/SimiliarProducts.jsx",
+    "src/app/layout.jsx",
+    "src/app/loading.jsx",
+    "src/app/StoreProvider.jsx",
+    "src/components/BestSellers.jsx",
+    "src/components/Footer.jsx",
+    "src/components/HomeCart.jsx",
+    "src/components/Navbar.jsx",
+    "src/components/PostNav.jsx",
+    "src/firebase/firebase.js",
+    "src/lib/api/get-products.ts"
+  ],
   "exclude": ["node_modules"]
 }

@@ -1,46 +1,95 @@
+import { getAllProducts, getCategoryByName } from "@/lib/api/get-products";
 import Image from "next/image";
 import Link from "next/link";
 
+// Export the interfaces so they can be imported in other files
+export interface Category {
+  active: boolean;
+  categoryName: string;
+  description: string;
+  desktopBanner: string | null;
+  id: string;
+  images: string[];
+  isSubcategory: boolean;
+  mobileBanner: string | null;
+  parentCategory: {
+    categoryId: string;
+    categoryName: string;
+  };
+  products: string[]; // Array of product IDs
+}
 
+export interface Product {
+  active: boolean;
+  categories: string[]; // Array of category IDs
+  description: string;
+  id: string;
+  images: string[];
+  productCategory: string;
+  productDiscountedPrice: number;
+  productName: string;
+  productPrice: number;
+  productUnit: string;
+  quantity: number;
+  shippingCost: number;
+  skuId: string;
+  taxRate: number;
+  unitQuantity: number;
+  variants?: Array<{
+    optionName: string;
+    optionValue: string[];
+  }>;
+}
 
-const page = () => {
-  const items = [
-    {
-      name: "NEW COLLECTION",
-      image:
-        "https://dukaan.b-cdn.net/700x700/webp/media/d8e8c97d-bb90-4337-b782-3b03c631a87c.jpeg",
-    },
-    {
-      name: "NEW COLLECTION",
-      image:
-        "https://dukaan.b-cdn.net/700x700/webp/media/53525d27-e4bc-44c0-97d6-f3b8e918820f.jpeg",
-    },
-  ];
+const Page = async ({
+  params,
+}: {
+  params: Promise<{ categoryName: string }>;
+}) => {
+  const { categoryName } = await params;
+  const [category, products] = await Promise.all([
+    getCategoryByName(categoryName),
+    getAllProducts("products"),
+  ]);
 
+  if (!category) {
+    return <div>Category not found</div>; // Handle case where category is not found
+  }
+
+  const categoryProducts = products.filter((product) =>
+    category.products.includes(product.id)
+  );
 
   return (
     <div className="mx-auto w-[960px]">
-      <h1>Category: </h1>
-      <div className="grid grid-cols-2 gap-6">
-        {items.map((item, index) => (
-          <div key={index} className="border p-2 rounded-lg">
-            <Link href={`/product`}>
-              <Image
-                src={item.image}
-                width={300}
-                height={300}
-                alt={item.name}
-                className="rounded-lg"
-              />
-            </Link>
-            <p>{item.name}</p>
-            <p className="text-gray-600">₹ 1660</p>
-            <button className="border px-3 text-blue-700 mt-2">ADD +</button>
+      <div>
+        <div key={category.id} className="mb-8">
+          <div className="grid grid-cols-2 gap-6">
+            {categoryProducts.map((product) => (
+              <div key={product.id} className="border p-2 rounded-lg">
+                <Link href={`/categories/${categoryName}/${product.id}`}>
+                  {product.images && product.images.length > 0 && (
+                    <Image
+                      src={product.images[0]}
+                      width={300}
+                      height={300}
+                      alt={product.productName}
+                      className="rounded-lg"
+                    />
+                  )}
+                </Link>
+                <p>{product.productName}</p>
+                <p className="text-gray-600">₹ {product.productPrice}</p>
+                <button className="border px-3 text-blue-700 mt-2">
+                  ADD +
+                </button>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
 };
 
-export default page;
+export default Page;
