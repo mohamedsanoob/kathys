@@ -1,15 +1,19 @@
 import { getProductById } from "@/lib/api/get-products";
 import ProductImage from "./ProductImage";
 import ProductVariants from "./ProductVariants";
+import { Product } from "@/app/categories/[categoryName]/page";
 
 // Define interfaces for our data
 
 const ProductDetails = async ({ productId }: { productId: string }) => {
-  const product = await getProductById(productId, "products");
+  const productData = await getProductById(productId, "products");
 
-  if (!product) {
+  if (!productData) {
     return <div>Product not found</div>;
   }
+
+  // Type assertion to convert DocumentInterface to Product
+  const product = productData as unknown as Product;
 
   return (
     <div className="w-full flex items-start py-[12]">
@@ -29,7 +33,6 @@ const ProductDetails = async ({ productId }: { productId: string }) => {
             <h3 className="font-semibold">{product.productPrice}</h3>
             <ProductVariants product={product} />
 
-           
             <div className="flex gap-8"></div>
             <div className="flex flex-col gap-2">
               <p>Product Details</p>

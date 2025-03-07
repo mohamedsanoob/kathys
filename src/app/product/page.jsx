@@ -7,9 +7,7 @@ const page = () => {
   
   return (
     <div className="w-[90%] mx-auto flex flex-col">
-      <ProductDetails />
-      <SimiliarProducts />
-      <Review />
+      Need to remove this page
     </div>
   );
 };
