@@ -32,8 +32,8 @@ const HomeCollections = async () => {
                   <Image
                     src={product.images[0]}
                     alt="product"
-                    width={80}
-                    height={50}
+                    width={1000}
+                    height={1000}
                     className="w-full max-h-[220px] h-full object-contain aspect-[4/5] transition-all duration-400"
                   />
                 </Link>

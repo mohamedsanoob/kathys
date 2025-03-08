@@ -5,7 +5,13 @@ import { Product } from "@/app/categories/[categoryName]/page";
 
 // Define interfaces for our data
 
-const ProductDetails = async ({ productId }: { productId: string }) => {
+const ProductDetails = async ({
+  productId,
+  categoryName,
+}: {
+  productId: string;
+  categoryName: string;
+}) => {
   const productData = await getProductById(productId, "products");
 
   if (!productData) {
@@ -20,7 +26,7 @@ const ProductDetails = async ({ productId }: { productId: string }) => {
       <div className="container mx-auto p-4">
         {/* Breadcrumb */}
         <nav className="text-sm text-gray-600 mb-4">
-          Home / Categories / Kurthis /{" "}
+          Home / Categories / {categoryName} /
           <span className="font-semibold">{product.productName}</span>
         </nav>
 

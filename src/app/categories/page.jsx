@@ -18,8 +18,8 @@ const Categories = async () => {
             <div className="relative flex overflow-hidden rounded-xl h-full">
               <div className="w-full relative before:bg-gradient-to-b before:from-transparent before:to-black/60 before:w-full before:h-full before:absolute before:top-0 before:left-0">
                 <Image
-                  width={1}
-                  height={1}
+                  width={1000}
+                  height={1000}
                   src={category.images[0] === "" ? null : category.images[0]}
                   alt={category.categoryName}
                   className="h-full w-full object-contain aspect-square"

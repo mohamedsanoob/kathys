@@ -1,12 +1,16 @@
-import ProductDetails from "@/app/product/_components/ProductDetails"
+import ProductDetails from "@/app/product/_components/ProductDetails";
 
-const page = async ({ params }: { params: Promise<{ productId: string }> }) => {
-  const { productId } = await params;
+const page = async ({
+  params,
+}: {
+  params: Promise<{ productId: string; categoryName: string }>;
+}) => {
+  const { productId,categoryName } = await params;
   return (
     <div>
-      <ProductDetails productId={productId} />
+      <ProductDetails productId={productId} categoryName={categoryName} />
     </div>
   );
 };
 
-export default page
+export default page;

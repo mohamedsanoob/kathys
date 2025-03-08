@@ -16,8 +16,8 @@ const ProductImage = ({ product }: { product: Product }) => {
               className="w-[80px] h-[100px] border border-gray-200"
             >
               <Image
-                width={1}
-                height={1}
+                width={1000}
+                height={1000}
                 src={img}
                 alt={`Kurthi thumbnail`}
                 className="w-full h-full object-contain aspect-square"
@@ -27,8 +27,8 @@ const ProductImage = ({ product }: { product: Product }) => {
         </div>
         <div className="w-[452px] h-[564px]">
           <Image
-            width={1}
-            height={1}
+            width={1000}
+            height={1000}
             src={selectedImage}
             alt="Selected Kurthi"
             className="w-full h-full aspect-square object-contain" // Added aspect ratio
