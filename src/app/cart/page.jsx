@@ -10,18 +10,23 @@ const CartPage = () => {
   const searchParams = useSearchParams();
   const renderPage = searchParams.get("page");
 
+  const renderContent = () => {
+    switch (renderPage) {
+      case "shipping":
+        return <ShippingForm />;
+      case "payment-mode":
+        return <PaymentMode />;
+      default:
+        return <CartItems />;
+    }
+  };
+
   return (
-    <div className="flex justify-between p-4 relative w-full">
-      <div className="w-[80%]">
-        {renderPage === "shipping" ? (
-          <ShippingForm />
-        ) : renderPage === "payment-mode" ? (
-          <PaymentMode />
-        ) : (
-          <CartItems />
-        )}
+    <div className="flex justify-between p-12 relative w-full gap-8">
+      <div className="w-[65%]">
+        {renderContent()}
       </div>
-      <div className="sticky top-0">
+      <div className="w-[35%] sticky top-[14%] h-fit">
         <Checkout />
       </div>
     </div>

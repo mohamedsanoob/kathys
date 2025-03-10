@@ -5,8 +5,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
 import { useShippingStore } from "@/store/store";
+import { ChevronDown } from "lucide-react";
+import { useMemo } from "react";
 
-// Move validation schema outside component to prevent recreation
 const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   mobile: yup
@@ -28,7 +29,6 @@ const validationSchema = yup.object().shape({
   state: yup.string().required("State is required"),
 });
 
-// Define types for form data
 interface FormData {
   name: string;
   mobile: string;
@@ -41,20 +41,6 @@ interface FormData {
   state: string;
 }
 
-// Define the field type to include all possible field names
-interface FormField {
-  name: keyof FormData;
-  label: string;
-  type: string;
-  placeholder: string;
-  multiline?: boolean;
-  rows?: number;
-  halfWidth?: boolean;
-  fullWidth?: boolean;
-  select?: boolean;
-}
-
-// Move states array outside component
 const indianStates = [
   "Andhra Pradesh",
   "Arunachal Pradesh",
@@ -86,86 +72,18 @@ const indianStates = [
   "West Bengal",
 ];
 
-// Move form fields configuration outside component
-const formFields: FormField[] = [
-  {
-    name: "name",
-    label: "Name",
-    type: "text",
-    placeholder: "Enter your name",
-    fullWidth: true,
+const commonTextFieldStyles = {
+  "& .MuiInputBase-root": {
+    height: "3rem",
+    fontFamily: "Poppins",
+    fontSize: "14px",
   },
-  {
-    name: "mobile",
-    label: "Mobile",
-    type: "tel",
-    placeholder: "Enter your mobile number",
-    halfWidth: true,
+  "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#000",
   },
-  {
-    name: "email",
-    label: "Email",
-    type: "email",
-    placeholder: "Enter your email",
-    halfWidth: true,
+  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#000",
   },
-  {
-    name: "address",
-    label: "Address",
-    type: "text",
-    placeholder: "Enter your address",
-    multiline: true,
-    rows: 3,
-    fullWidth: true,
-  },
-  {
-    name: "locality",
-    label: "Locality",
-    type: "text",
-    placeholder: "Enter your locality",
-    halfWidth: true,
-  },
-  {
-    name: "landmark",
-    label: "Landmark",
-    type: "text",
-    placeholder: "Enter landmark (optional)",
-    halfWidth: true,
-  },
-  {
-    name: "pincode",
-    label: "Pincode",
-    type: "text",
-    placeholder: "Enter your pincode",
-    halfWidth: true,
-  },
-  {
-    name: "city",
-    label: "City",
-    type: "text",
-    placeholder: "Enter your city",
-    halfWidth: true,
-  },
-  {
-    name: "state",
-    label: "State",
-    type: "text",
-    placeholder: "Select your state",
-    fullWidth: true,
-    select: true,
-  },
-];
-
-const defaultValues = {
-  name: "",
-  mobile: "",
-  email: "",
-  address: "",
-  locality: "",
-  landmark: "",
-  pincode: "",
-  city: "",
-  state: "",
 };
 
 const ShippingForm = () => {
@@ -179,7 +97,17 @@ const ShippingForm = () => {
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(validationSchema),
-    defaultValues,
+    defaultValues: {
+      name: "",
+      mobile: "",
+      email: "",
+      address: "",
+      locality: "",
+      landmark: "",
+      pincode: "",
+      city: "",
+      state: "",
+    },
   });
 
   const onSubmit = (data: FormData) => {
@@ -187,70 +115,130 @@ const ShippingForm = () => {
     router.push("/cart?page=payment-mode");
   };
 
-  const renderTextField = (field: FormField) => {
-    if (field.name === "state") {
-      return (
-        <Controller
-          name={field.name}
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <TextField
-              select
-              value={value || ""}
-              onChange={onChange}
-              error={!!errors[field.name]}
-              helperText={errors[field.name]?.message}
-              placeholder={field.placeholder}
-              fullWidth
-            >
-              {indianStates.map((state) => (
-                <MenuItem key={state} value={state}>
-                  {state}
-                </MenuItem>
-              ))}
-            </TextField>
-          )}
-        />
-      );
-    }
-
-    return (
+  const renderTextField = useMemo(() => {
+    const MemoizedTextField = (
+      name: keyof FormData,
+      placeholder: string,
+      options = {}
+    ) => (
       <TextField
-        {...register(field.name)}
-        type={field.type}
-        placeholder={field.placeholder}
-        multiline={field.multiline}
-        rows={field.rows}
-        error={!!errors[field.name]}
-        helperText={errors[field.name]?.message}
+        {...register(name)}
+        placeholder={placeholder}
+        error={!!errors[name]}
+        helperText={errors[name]?.message}
         fullWidth
+        {...options}
+        sx={commonTextFieldStyles}
       />
     );
-  };
+    MemoizedTextField.displayName = "MemoizedTextField";
+    return MemoizedTextField;
+  }, [register, errors]);
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="mx-auto w-full">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Shipping</h1>
-        <p className="text-blue-600 cursor-pointer hover:underline">
+        <h1 className="text-xl font-semi-bold">Shipping address</h1>
+        <p className="text-sm text-black cursor-pointer border border-black px-2 py-1 rounded-md hover:bg-gray-200">
           Already a user? Sign in
         </p>
       </div>
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {formFields.map((field) => (
-          <div
-            key={field.name}
-            className={`${field.halfWidth ? "grid grid-cols-2 gap-4" : ""}`}
-          >
-            <div className="flex flex-col gap-2">
-              <label className="font-medium">{field.label}</label>
-              {renderTextField(field)}
-            </div>
+        <div className="flex flex-col gap-2">
+          <label className="text-sm text-gray-600">Name</label>
+          {renderTextField("name", "Enter your name")}
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm text-gray-600">Mobile</label>
+            {renderTextField("mobile", "Enter mobile number", {
+              InputProps: {
+                startAdornment: <span className="mr-2">+91</span>,
+              },
+            })}
           </div>
-        ))}
+          <div className="flex flex-col gap-2">
+            <label className="text-sm text-gray-600">Email</label>
+            {renderTextField("email", "Enter email")}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-sm text-gray-600">Address</label>
+          {renderTextField("address", "Enter address", { multiline: true })}
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm text-gray-600">Locality</label>
+            {renderTextField("locality", "Enter locality")}
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm text-gray-600">Landmark</label>
+            {renderTextField("landmark", "Enter landmark (optional)")}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm text-gray-600">Pincode</label>
+            {renderTextField("pincode", "Enter pincode")}
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm text-gray-600">City</label>
+            {renderTextField("city", "Enter city")}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-sm text-gray-600">State</label>
+          <Controller
+            name="state"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextField
+                select
+                value={value || ""}
+                onChange={onChange}
+                error={!!errors.state}
+                helperText={errors.state?.message}
+                placeholder="Select state"
+                fullWidth
+                SelectProps={{
+                  IconComponent: ChevronDown,
+                  displayEmpty: true,
+                  renderValue: (selected: unknown) =>
+                    selected ? (selected as string) : <span className="text-gray-500">Select state</span>,
+                  MenuProps: {
+                    PaperProps: {
+                      style: {
+                        maxHeight: 600,
+                      },
+                    },
+                  },
+                }}
+                sx={{
+                  ...commonTextFieldStyles,
+                  "& .MuiMenuItem-root": {
+                    height: "4rem",
+                  },
+                }}
+              >
+                {indianStates.map((state) => (
+                  <MenuItem key={state} value={state}>
+                    {state}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+        </div>
+
         <button
           type="submit"
-          className="w-full mt-6 bg-blue-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors"
+          className="w-full mt-6 bg-black text-white px-6 py-3 rounded-lg font-mediumtransition-colors"
         >
           Continue to Payment
         </button>
