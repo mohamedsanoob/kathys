@@ -7,26 +7,26 @@ const Categories = async () => {
 
   return (
     <div className="container mx-auto">
-      <p className="my-8 ml-4">All Categories</p>
-      <div className="flex flex-wrap w-[calc(90%+32px)] mb-16">
-        {categories?.map((category) => (
+      <h2 className="my-6 ml-4 text-xl">All Categories</h2>
+      <div className="flex flex-wrap w-full mb-16">
+        {categories?.map(({ id, categoryName, images }) => (
           <Link
-            href={"/categories/" + category.categoryName}
-            key={category.id}
-            className="m-4 w-[calc(20%-32px)] overflow-hidden"
+            href={`/categories/${categoryName}`}
+            key={id}
+            className="m-4 w-[calc(20%-32px)] max-w-[calc(20%-32px)]"
           >
-            <div className="relative flex overflow-hidden rounded-xl h-full">
-              <div className="w-full relative before:bg-gradient-to-b before:from-transparent before:to-black/60 before:w-full before:h-full before:absolute before:top-0 before:left-0">
+            <div className="flex flex-col gap-3">
+              <div className="rounded-lg border border-gray-200 bg-white hover:border-gray-300 transition-colors shadow-md">
                 <Image
                   width={1000}
                   height={1000}
-                  src={category.images[0] === "" ? null : category.images[0]}
-                  alt={category.categoryName}
-                  className="h-full w-full object-contain aspect-square"
+                  src={images[0] || '/placeholder.png'}
+                  alt={categoryName}
+                  className="aspect-[4/5] w-full object-contain"
                 />
               </div>
-              <p className="absolute bottom-0 left-0 p-3 text-white">
-                {category.categoryName}
+              <p className="text-center font-medium text-lg">
+                {categoryName.toUpperCase()}
               </p>
             </div>
           </Link>

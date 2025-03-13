@@ -5,10 +5,15 @@ import { db } from "@/firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import Image from "next/image";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useStore } from "@/store/store";
+import { getAllProducts } from "@/lib/api/get-products";
 
 const CartItems = () => {
+  const { setAmount, setDeliveryCharge } = useStore();
   const [cartItems, setCartItems] = useState([]);
   const [products, setProducts] = useState([]);
+
+
 
   const fetchCartAndProducts = useCallback(async () => {
     try {
@@ -31,6 +36,18 @@ const CartItems = () => {
 
       const productDetails = await Promise.all(productPromises);
       setProducts(productDetails.filter(Boolean));
+      setAmount(
+        productDetails.reduce(
+          (sum, product) => sum + product.productPrice * product.quantity,
+          0
+        )
+      );
+      setDeliveryCharge(
+        productDetails.reduce(
+          (sum, product) => sum + product.shippingCost * product.quantity,
+          0
+        )
+      );
     } catch (error) {
       console.error("Failed to fetch cart and products:", error);
     }
@@ -40,15 +57,18 @@ const CartItems = () => {
     fetchCartAndProducts();
   }, [fetchCartAndProducts]);
 
-  const totalAmount = useMemo(() => 
-    products.reduce((sum, product) => 
-      sum + product.productPrice * product.quantity, 0
-    ), [products]
+  const totalAmount = useMemo(
+    () =>
+      products.reduce(
+        (sum, product) => sum + product.productPrice * product.quantity,
+        0
+      ),
+    [products]
   );
 
   const handleQuantityToggle = useCallback((productId, isOpen) => {
-    setProducts(products => 
-      products.map(p => ({
+    setProducts((products) =>
+      products.map((p) => ({
         ...p,
         isOpen: p.id === productId ? isOpen : false,
       }))
@@ -61,34 +81,37 @@ const CartItems = () => {
         productId,
         quantity: -quantity,
       });
-      setProducts(products => products.filter(p => p.id !== productId));
+      setProducts((products) => products.filter((p) => p.id !== productId));
     } catch (error) {
       console.error("Failed to remove from cart:", error);
     }
   }, []);
 
-  const handleQuantityChange = useCallback(async (productId, newQuantity) => {
-    try {
-      const product = products.find(p => p.id === productId);
-      if (!product) return;
+  const handleQuantityChange = useCallback(
+    async (productId, newQuantity) => {
+      try {
+        const product = products.find((p) => p.id === productId);
+        if (!product) return;
 
-      const quantityDiff = newQuantity - product.quantity;
-      await addProductToCart({
-        productId,
-        quantity: quantityDiff,
-      });
-      
-      setProducts(products =>
-        products.map(p =>
-          p.id === productId
-            ? { ...p, quantity: newQuantity, isOpen: false }
-            : p
-        )
-      );
-    } catch (error) {
-      console.error("Failed to update quantity:", error);
-    }
-  }, [products]);
+        const quantityDiff = newQuantity - product.quantity;
+        await addProductToCart({
+          productId,
+          quantity: quantityDiff,
+        });
+
+        setProducts((products) =>
+          products.map((p) =>
+            p.id === productId
+              ? { ...p, quantity: newQuantity, isOpen: false }
+              : p
+          )
+        );
+      } catch (error) {
+        console.error("Failed to update quantity:", error);
+      }
+    },
+    [products]
+  );
 
   const ProductQuantityButtons = ({ product }) => (
     <div

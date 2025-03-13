@@ -110,7 +110,9 @@ export async function addProductToCart({
 
     // Check if total requested quantity is available
     if (newQuantity > stockQuantity) {
-      throw new Error("Requested quantity exceeds available stock");
+      throw new Error(
+        `Requested quantity exceeds available stock. Available: ${stockQuantity}`
+      );
     }
 
     const updatedProducts =

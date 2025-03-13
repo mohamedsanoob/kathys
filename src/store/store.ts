@@ -23,3 +23,10 @@ export const useShippingStore = create<ShippingStore>((set) => ({
   setShippingDetails: (details) => set({ shippingDetails: details }),
   clearShippingDetails: () => set({ shippingDetails: null }),
 }));
+
+export const useStore = create((set) => ({
+  amount: 0,
+  setAmount: (amount: number) => set({ amount }),
+  deliveryCharge: 0,
+  setDeliveryCharge: (charge: number) => set({ deliveryCharge: charge }),
+}));

@@ -1,3 +1,4 @@
+import AddToCart from "@/components/AddToCart";
 import { getAllProducts, getCategoryByName } from "@/lib/api/get-products";
 import Image from "next/image";
 import Link from "next/link";
@@ -53,7 +54,7 @@ const Page = async ({
   ]);
 
   if (!category) {
-    return <div>Category not found</div>; // Handle case where category is not found
+    return <div className="text-center text-red-500">Category not found</div>; // Handle case where category is not found
   }
 
   const categoryProducts = products.filter((product) =>
@@ -61,35 +62,43 @@ const Page = async ({
   );
 
   return (
-    <div className="mx-auto w-[960px]">
-      <div>
-        <div key={category.id} className="mb-8">
-          <div className="grid grid-cols-2 gap-6">
-            {categoryProducts.map((product) => (
-              <div key={product.id} className="border p-2 rounded-lg">
-                <Link href={`/categories/${categoryName}/${product.id}`}>
-                  {product.images && product.images.length > 0 && (
-                    <Image
-                      src={product.images[0]}
-                      width={300}
-                      height={300}
-                      alt={product.productName}
-                      className="rounded-lg"
-                    />
-                  )}
-                </Link>
-                <p>{product.productName}</p>
-                <p className="text-gray-600">₹ {product.productPrice}</p>
-                <button className="border px-3 text-blue-700 mt-2">
-                  ADD +
-                </button>
+    <div className="container mx-auto">
+      <div className="mb-8">
+        <div className="grid grid-cols-2 gap-6 py-6 sm:grid-cols-2 lg:grid-cols-4">
+          {categoryProducts?.map((product) => (
+            <div key={product.id} className="flex flex-col gap-3">
+              <Link
+                href={`categories/${category.categoryName}/${product.id}`}
+                className="overflow-hidden rounded-lg border border-gray-200 bg-white hover:border-gray-300 transition-colors"
+              >
+                <Image
+                  src={product.images[0]}
+                  alt={product.productName}
+                  width={400}
+                  height={500} // Increased height for more image height
+                  className="aspect-[4/5] w-full object-contain transition-transform duration-300 hover:scale-105"
+                  priority
+                />
+              </Link>
+
+              <div className="flex flex-col gap-2">
+                <h3 className="text-sm font-medium">
+                  {product.productName}
+                </h3>
+                <div className="flex items-center justify-between">
+                  <p className="font-semibold">
+                    ${product.productPrice}
+                  </p>
+                  <AddToCart product={product} />
+                </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
 };
+  
 
 export default Page;

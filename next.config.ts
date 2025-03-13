@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "https://dukaan.b-cdn.net",
+        hostname: "dukaan.b-cdn.net",
       },
     ],
   },

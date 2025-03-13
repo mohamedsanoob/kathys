@@ -1,9 +1,11 @@
 "use client";
 
+import { useStore } from "@/store/store";
 import { ChevronRight } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const Checkout = () => {
+    const { amount,deliveryCharge} = useStore();
   const router = useRouter();
   const searchParams = useSearchParams();
   const renderPage = searchParams.get("page");
@@ -38,17 +40,17 @@ const Checkout = () => {
         <div className="flex flex-col gap-2 border-b border-dashed border-gray-200 pb-3">
           <div className="flex justify-between">
             <p className="text-sm">Item total</p>
-            <p className="text-sm">₹ 1000</p>
+            <p className="text-sm">{amount}</p>
           </div>
           <div className="flex justify-between">
             <p className="text-sm">Delivery fee</p>
-            <p className="text-sm">₹ 1000</p>
+            <p className="text-sm">{deliveryCharge}</p>
           </div>
         </div>
         <div className="flex flex-col pb-3 border-b border-dashed border-gray-200">
           <div className="flex justify-between">
             <p className="text-md font-[500]">Grant total</p>
-            <p className="text-sm">₹ 1000</p>
+            <p className="text-sm">{amount + deliveryCharge}</p>
           </div>
           <p className="text-xs text-gray-500">Inclusive of all taxes</p>
         </div>
