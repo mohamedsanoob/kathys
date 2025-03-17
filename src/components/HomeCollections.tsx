@@ -6,7 +6,7 @@ import Image from "next/image";
 const HomeCollections = async () => {
   const [categories, products] = await Promise.all([
     getCategories("categories"),
-    getAllProducts("products"), 
+    getAllProducts("products"),
   ]);
 
   return (
@@ -21,10 +21,7 @@ const HomeCollections = async () => {
           </div>
           <div className="grid grid-cols-2 gap-6 py-6 sm:grid-cols-3 lg:grid-cols-5">
             {products?.map((product) => (
-              <div
-                key={product.id}
-                className="flex flex-col gap-3"
-              >
+              <div key={product.id} className="flex flex-col gap-3">
                 <Link
                   href={`categories/${category.categoryName}/${product.id}`}
                   className="overflow-hidden rounded-lg border border-gray-200 bg-white hover:border-gray-300 transition-colors"
@@ -44,8 +41,20 @@ const HomeCollections = async () => {
                     {product.productName}
                   </h3>
                   <div className="flex items-center justify-between">
-                    <p className="text-lg font-semibold">${product.productPrice}</p>
-                    <AddToCart product={product} />
+                    <p className="text-lg font-semibold">
+                      ${product.productPrice}
+                    </p>
+                    <AddToCart
+                      product={{
+                        id: product.id,
+                        unitQuantity: product.unitQuantity,
+                        productName: product.productName,
+                        images: product.images,
+                        productPrice: product.productPrice,
+                        variantDetails: product.variantDetails,
+                        variants: product.variants,
+                      }}
+                    />
                   </div>
                 </div>
               </div>

@@ -82,14 +82,20 @@ const Page = async ({
               </Link>
 
               <div className="flex flex-col gap-2">
-                <h3 className="text-sm font-medium">
-                  {product.productName}
-                </h3>
+                <h3 className="text-sm font-medium">{product.productName}</h3>
                 <div className="flex items-center justify-between">
-                  <p className="font-semibold">
-                    ${product.productPrice}
-                  </p>
-                  <AddToCart product={product} />
+                  <p className="font-semibold">${product.productPrice}</p>
+                  <AddToCart
+                    product={{
+                      id: product.id,
+                      unitQuantity: product.unitQuantity,
+                      productName: product.productName,
+                      images: product.images,
+                      productPrice: product.productPrice,
+                      variantDetails: product.variantDetails,
+                      variants: product.variants,
+                    }}
+                  />
                 </div>
               </div>
             </div>

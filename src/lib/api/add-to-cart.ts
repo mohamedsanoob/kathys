@@ -48,24 +48,48 @@ export async function getCartCount() {
   return products.reduce((total, { quantity }) => total + quantity, 0);
 }
 
-export async function addProductToCart({
-  productId,
-  quantity,
-}: {
+interface Combination {
+  name: string;
+  value: string;
+}
+
+interface VariantDetail {
+  combination: Combination[];
+  discountedPrice: number;
+  inventory: number;
+  price: number;
+  sku: string;
+}
+
+interface CartProduct {
   productId: string;
   quantity: number;
+  variantDetails?: VariantDetail;
+}
+
+interface CartData {
+  userId: string | null;
+  products: CartProduct[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export async function addProductToCart({
+  productId,
+  variantDetails,
+  quantity,
+  availableStock,
+}: {
+  productId: string;
+  variantDetails?: VariantDetail;
+  quantity: number;
+  availableStock?: number;
 }): Promise<void> {
+  console.log(variantDetails, "variantDetails");
+  console.log(quantity, "quantiyi");
+
   try {
-    // Check product stock first
-    const productRef = doc(db, "products", productId);
-    const productSnap = await getDoc(productRef);
-
-    if (!productSnap.exists()) {
-      throw new Error("Product not found");
-    }
-
-    const productData = productSnap.data();
-    const stockQuantity = productData.unitQuantity || 0;
+    const stockQuantity = variantDetails?.inventory ?? availableStock ?? 0; // Use availableStock if variantDetails.inventory is not present
 
     const user = auth.currentUser;
     const isLoggedIn = user && !user.isAnonymous;
@@ -82,14 +106,13 @@ export async function addProductToCart({
     const cartSnapshot = await getDoc(cartRef);
 
     if (!cartSnapshot.exists()) {
-      // Check if requested quantity is available
       if (quantity > stockQuantity) {
         throw new Error("Requested quantity exceeds available stock");
       }
 
       await setDoc(cartRef, {
         userId: isLoggedIn ? cartId : null,
-        products: [{ productId, quantity }],
+        products: [{ productId, quantity, variantDetails }],
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -98,8 +121,13 @@ export async function addProductToCart({
 
     const { products } = cartSnapshot.data() as CartData;
     const existingProductIndex = products.findIndex(
-      (p) => p.productId === productId
+      (p) =>
+        p.productId === productId &&
+        JSON.stringify(p.variantDetails?.combination || []) ===
+          JSON.stringify(variantDetails?.combination || [])
     );
+
+    console.log(existingProductIndex, "existingProductIndex");
 
     let newQuantity;
     if (existingProductIndex >= 0) {
@@ -108,7 +136,6 @@ export async function addProductToCart({
       newQuantity = quantity;
     }
 
-    // Check if total requested quantity is available
     if (newQuantity > stockQuantity) {
       throw new Error(
         `Requested quantity exceeds available stock. Available: ${stockQuantity}`
@@ -122,7 +149,9 @@ export async function addProductToCart({
               ? { ...product, quantity: newQuantity }
               : product
           )
-        : [...products, { productId, quantity }];
+        : [...products, { productId, quantity, variantDetails }];
+
+    console.log(updatedProducts, "updatedProducts");
 
     await updateDoc(cartRef, {
       products: updatedProducts,
