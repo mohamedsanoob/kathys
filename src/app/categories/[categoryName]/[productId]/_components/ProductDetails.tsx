@@ -1,7 +1,7 @@
 import { getProductById } from "@/lib/api/get-products";
-import ProductImage from "./ProductImage";
-import ProductVariants from "./ProductVariants";
 import { Product } from "@/app/categories/[categoryName]/page";
+import ProductVariants from "./ProductVariants";
+import ProductImage from "./ProductImage";
 
 // Define interfaces for our data
 
@@ -34,10 +34,24 @@ const ProductDetails = async ({
           {/* Left Side - Thumbnails */}
 
           <ProductImage product={product} />
-          <div className="flex flex-col gap-4">
-            <h4 className="text-xl">{product.productName}</h4>
-            <h3 className="font-semibold">{product.productPrice}</h3>
-            <ProductVariants product={product} />
+          <div className="flex flex-col gap-4 w-[50%]">
+            <div className="flex flex-col gap-1">
+              <h4 className="text-xl">{product.productName?.toUpperCase()}</h4>
+              <h3 className="font-semibold text-xl">
+                ₹ {product.productPrice}
+              </h3>
+            </div>
+            <ProductVariants
+              product={{
+                id: product.id,
+                unitQuantity: product.unitQuantity,
+                productName: product.productName,
+                images: product.images,
+                productPrice: product.productPrice,
+                variantDetails: productData.variantDetails || [], 
+                variants: productData.variants || [],
+              }}
+            />
 
             <div className="flex gap-8"></div>
             <div className="flex flex-col gap-2">

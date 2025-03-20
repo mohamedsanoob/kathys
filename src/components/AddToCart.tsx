@@ -43,6 +43,7 @@ interface Product {
 
 const AddToCart = ({ product }: { product: Product }) => {
   const [productCount, setProductCount] = useState(0);
+  const [variantCount, setVariantCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
@@ -54,6 +55,37 @@ const AddToCart = ({ product }: { product: Product }) => {
     Record<string, string>
   >({});
 
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const cartItems = await getCart();
+        const productItems = cartItems.filter(
+          (item) => item.productId === product.id
+        );
+        setProductCount(
+          productItems.reduce((total, item) => total + item.quantity, 0)
+        );
+
+        if (selectedVariant) {
+          const totalVariantCount = cartItems
+            .filter(
+              (item) =>
+                item.productId === product.id &&
+                item.variantDetails?.sku === selectedVariant.sku
+            )
+            .reduce((total, item) => total + item.quantity, 0);
+          setVariantCount(totalVariantCount);
+        } else {
+          setVariantCount(0);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to fetch cart");
+        setOpen(true);
+      }
+    };
+    fetchCart();
+  }, [product.id, selectedVariant]);
+
   const handleClose = () => {
     setOpen(false);
     setError(null);
@@ -63,56 +95,18 @@ const AddToCart = ({ product }: { product: Product }) => {
     setDialogOpen(false);
     setSelectedVariant(null);
     setSelectedOptions({});
+    setVariantCount(0);
   };
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const cartItems = await getCart();
-        const productItems = cartItems.filter(
-          (item) => item.productId === product.id
-        );
-        const totalProductCount = productItems.reduce(
-          (total, item) => total + item.quantity,
-          0
-        );
-        setProductCount(totalProductCount);
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Failed to fetch cart";
-        setError(errorMessage);
-        setOpen(true);
-      }
-    };
-    fetchCart();
-  }, [product.id]);
-
   const handleAddToCart = async () => {
-    console.log(product, "product");
     const inventory =
       product.variantDetails[0]?.inventory ?? product.unitQuantity;
     const variant = product.variantDetails[0] || [];
 
-    if (product?.variantDetails?.length > 1) {
+    if (product.variantDetails.length > 1) {
       setDialogOpen(true);
     } else {
-      try {
-        setIsLoading(true);
-        await addProductToCart({
-          productId: product.id,
-          quantity: 1,
-          variantDetails: variant,
-          availableStock: inventory,
-        });
-        setProductCount((prev) => prev + 1);
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Failed to add item to cart";
-        setError(errorMessage);
-        setOpen(true);
-      } finally {
-        setIsLoading(false);
-      }
+      await updateCart(1, variant, inventory);
     }
   };
 
@@ -121,19 +115,30 @@ const AddToCart = ({ product }: { product: Product }) => {
       product.variantDetails[0]?.inventory ?? product.unitQuantity;
     const variant = product.variantDetails[0];
 
+    if (product.variantDetails.length > 1) {
+      setDialogOpen(true);
+    } else {
+      await updateCart(-1, variant, inventory);
+    }
+  };
+
+  const updateCart = async (
+    quantity: number,
+    variant: VariantDetail,
+    inventory: number
+  ) => {
     try {
       setIsLoading(true);
       await addProductToCart({
         productId: product.id,
-        quantity: -1,
+        quantity,
         variantDetails: variant,
         availableStock: inventory,
       });
-      setProductCount((prev) => Math.max(0, prev - 1));
+      setProductCount((prev) => Math.max(0, prev + quantity));
+      setVariantCount((prev) => Math.max(0, prev + quantity));
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to remove item from cart";
-      setError(errorMessage);
+      setError(err instanceof Error ? err.message : "Failed to update cart");
       setOpen(true);
     } finally {
       setIsLoading(false);
@@ -142,24 +147,15 @@ const AddToCart = ({ product }: { product: Product }) => {
 
   const handleConfirmAddToCart = async () => {
     if (selectedVariant) {
-      try {
-        setIsLoading(true);
-        await addProductToCart({
-          productId: product.id,
-          variantDetails: selectedVariant,
-          quantity: 1,
-          availableStock: selectedVariant.inventory,
-        });
-        setProductCount((prev) => prev + 1);
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Failed to add item to cart";
-        setError(errorMessage);
-        setOpen(true);
-      } finally {
-        setIsLoading(false);
-        handleDialogClose();
-      }
+      await updateCart(1, selectedVariant, selectedVariant.inventory);
+    } else {
+      setError("Please select options");
+    }
+  };
+
+  const handleRemoveCart = async () => {
+    if (selectedVariant) {
+      await updateCart(-1, selectedVariant, selectedVariant.inventory);
     } else {
       setError("Please select options");
     }
@@ -223,7 +219,6 @@ const AddToCart = ({ product }: { product: Product }) => {
           </button>
         </div>
       )}
-      {/* ... (rest of the component remains the same) */}
       <Snackbar
         open={open}
         autoHideDuration={2000}
@@ -277,7 +272,7 @@ const AddToCart = ({ product }: { product: Product }) => {
         <DialogContent>
           <div className="flex justify-between pb-2">
             <p className="font-medium text-lg">Select options</p>
-            <X onClick={handleDialogClose} />
+            <X onClick={handleDialogClose} className="cursor-pointer" />
           </div>
           <Divider />
           <p>{error}</p>
@@ -321,27 +316,67 @@ const AddToCart = ({ product }: { product: Product }) => {
           </div>
         </DialogContent>
         <DialogActions sx={{ padding: "1rem" }}>
-          <Button
-            fullWidth
-            onClick={handleConfirmAddToCart}
-            disabled={isLoading || !selectedVariant}
-            sx={{
-              textTransform: "none",
-              border: "1px solid black",
-              borderRadius: "0.5rem",
-              color: "black !important",
-              height: "48px",
-              fontFamily: "Poppins",
-            }}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 animate-spin" /> <p>Adding...</p>
-              </>
-            ) : (
-              "Add to Cart"
-            )}
-          </Button>
+          {variantCount > 0 ? (
+            <Button
+              fullWidth
+              disabled={isLoading || !selectedVariant}
+              sx={{
+                textTransform: "none",
+                border: "1px solid black",
+                borderRadius: "0.5rem",
+                color: "black !important",
+                height: "48px",
+                fontFamily: "Poppins",
+                padding: "0",
+              }}
+            >
+              <div className="flex items-center justify-between w-full">
+                <p
+                  onClick={handleRemoveCart}
+                  className="flex-1 text-center cursor-pointer text-xl bg-gray-200 p-2 rounded-l-lg"
+                >
+                  -
+                </p>
+                <p className="flex flex-1 justify-center items-center">
+                  {isLoading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    variantCount
+                  )}
+                </p>
+                <p
+                  onClick={handleConfirmAddToCart}
+                  className="flex-1 text-center cursor-pointer text-xl bg-gray-200 p-2 rounded-r-lg"
+                >
+                  +
+                </p>
+              </div>
+            </Button>
+          ) : (
+            <Button
+              fullWidth
+              disabled={isLoading || !selectedVariant}
+              sx={{
+                textTransform: "none",
+                border: "1px solid black",
+                borderRadius: "0.5rem",
+                color: "black !important",
+                height: "48px",
+                fontFamily: "Poppins",
+                padding: "0",
+              }}
+              onClick={handleConfirmAddToCart}
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <Loader2 className="animate-spin mr-2" /> <p>Adding..</p>
+                </div>
+              ) : (
+                "Add to Cart"
+              )}
+            </Button>
+          )}
+
           <Button
             fullWidth
             onClick={handleDialogClose}
